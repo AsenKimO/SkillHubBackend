@@ -11,19 +11,21 @@ class User(db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     name = db.Column(db.String, nullable = False)
-    username = db.Column(db.String, nullable = False)
-    password = db.Column(db.String, nullable = False)
-    rating = db.Column(db.Float, nullable = False)
-    skills = db.relationship("Skill", cascade="delete")
+    title = db.Column(db.String, nullable = False)
+    email = db.Column(db.String, nullable = False)
+    website = db.Column(db.String, nullable = False)
+    image_url = db.Column(db.String, nullable = False)
+    products = db.relationship("Product", cascade="delete")
 
     def __init__(self, **kwargs):
         """
         Initialize User object/entry
         """
         self.name = kwargs.get("name", "")
-        self.username = kwargs.get("username", "")
-        self.password = kwargs.get("password", "")
-        self.rating = kwargs.get("rating", 0.)
+        self.title = kwargs.get("title", "")
+        self.email = kwargs.get("email", "")
+        self.website = kwargs.get("website", "")
+        self.image_url = kwargs.get("image_url", "")
 
     def serialize(self):
         """
@@ -32,9 +34,11 @@ class User(db.Model):
         return {
             "id": self.id,
             "name": self.name,
-            "username": self.username,
-            "password": self.password,
-            "skills": [s.serialize() for s in self.skills]
+            "title": self.title,
+            "email": self.email,
+            "website": self.website,
+            "image_url": self.image_url,
+            "products": [p.serialize() for p in self.products]
         }
     
     def simple_ser(self):
@@ -44,39 +48,41 @@ class User(db.Model):
         return{
             "id": self.id,
             "name": self.name,
-            "username": self.username,
-            "password": self.password
+            "title": self.title,
+            "email": self.email,
+            "website": self.website,
+            "image_url": self.image_url
         }
 
 # ------------------------------ SKILL MODEL ----------------------------------
 
-class Skill(db.Model):
+class Product(db.Model):
     """
-    Skill Model
+    Product Model
     """
-    __tablename__ = "skills"
+    __tablename__ = "products"
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
-    skill_name = db.Column(db.String, nullable = False)
-    difficulty = db.Column(db.Integer, nullable = False)
-    estimate_payrate = db.Column(db.Float, nullable = False)
+    name = db.Column(db.String, nullable = False)
+    price = db.Column(db.Float, nullable = False)
+    description = db.Column(db.String, nullable = False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable = False)
 
     def __init__(self, **kwargs):
         """
-        Initialize Skill object/entry
+        Initialize Product object/entry
         """
-        self.skill_name = kwargs.get("skill_name", "")
-        self.difficulty = kwargs.get("difficulty", 0)
-        self.estimate_payrate = kwargs.get("estimate_payrate", 0.)
+        self.name = kwargs.get("name", "")
+        self.price = kwargs.get("price", 0.)
+        self.description = kwargs.get("description", "")
         self.user_id = kwargs.get("user_id")
 
     def serialize(self):
         """
-        Serialize an Skill object
+        Serialize an Product object
         """
         return {
             "id": self.id,
-            "skill_name": self.skill_name,
-            "difficulty": self.difficulty,
-            "estimate_payrate": self.estimate_payrate
+            "name": self.name,
+            "price": self.price,
+            "description": self.description
         }
