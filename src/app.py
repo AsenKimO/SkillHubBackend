@@ -28,7 +28,7 @@ def failure_response(message, code=404):
 # get all users
 @app.route("/api/users/")
 def get_all_users():
-    return success_response({"users": [u.simple_ser() for u in User.query.all()]})
+    return success_response({"users": [u.serialize() for u in User.query.all()]})
 
 # create a user
 @app.route("/api/users/", methods={"POST"})
