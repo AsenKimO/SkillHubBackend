@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+  pa5:
+    image: ako28/skillhub
+    ports:
+      - "8000:8000"
